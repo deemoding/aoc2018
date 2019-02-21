@@ -34,7 +34,7 @@ pub fn main() {
     let mut max_sum = 0;
     let mut asleep_most = 0;
     let mut max_id = "";
-    for (id, minute) in records.clone() {
+    for (id, minute) in &records {
         let mut max = 0;
         let mut max_index = 0;
         let mut sum = 0;
@@ -57,7 +57,7 @@ pub fn main() {
     let mut max_frequence = 0;
     let mut max_frequence_index = 0;
     let mut max_id = "";
-    for (id, minute) in records {
+    for (id, minute) in &records {
         let mut max = 0;
         let mut max_index = 0;
         minute.iter().enumerate().for_each(|(i, m)| {
