@@ -6,17 +6,24 @@ fn manhattan_distance(x:&[i32; 2], y:&[i32; 2]) -> i32 {
 fn find_nearest(x: i32, y: i32, coords:&Vec<Vec<i32>>) -> (i32, usize) {
     let mut min_distance:i32 = 9999;
     let mut min_index:usize = 0;
+    let mut count:u32 = 0;
     coords.iter().enumerate().for_each(|(index, coord)| {
         let distance = manhattan_distance(&[x, y], &[coord[0], coord[1]]);
-        // 如果和多个点距离相同，视为无效
+        // 计算重复解的数量
         if min_distance == distance {
-            min_distance = -1;
+            count += 1;
         }
         if min_distance > distance {
             min_distance = distance;
             min_index = index;
+            // 首次更新最小值，清空计数
+            count = 0;
         }
     });
+    // 最小解必须唯一，否则视为无效
+    if count > 0 {
+        min_distance = -1;
+    }
     return (min_distance, min_index);
 }
 
@@ -96,6 +103,20 @@ pub fn main() {
             }
         }
     }
-
     println!("part1: {}", max_area);
+
+    let mut region10000:u32 = 0;
+    for i in 0..xmax + 1 {
+        for j in 0..ymax + 1 {
+            let mut total_distance:i32 = 0;
+            coords.iter().for_each(|coord| {
+                let distance = manhattan_distance(&[i, j], &[coord[0], coord[1]]);
+                total_distance += distance;
+            });
+            if total_distance < 10000 {
+                region10000 += 1;
+            }
+        }
+    }
+    println!("part2: {}", region10000);
 }
