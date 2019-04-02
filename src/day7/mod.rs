@@ -51,14 +51,19 @@ pub fn main() {
     let mut task_ptr: usize = 0;
     let len = part1.len();
     let mut workers: [usize; 5] = [0; 5];
+    let mut working_task: [usize; 5] = [99; 5];
     let mut part2: usize = 0;
     while task_ptr < len {
         for worker_num in 0..5 as usize {
-            if workers[worker_num] == 0
-                && (parents[part1[task_ptr]] & done) == parents[part1[task_ptr]] {
-                workers[worker_num] = part1[task_ptr] + 60;
-                done |= 1 << part1[task_ptr];
-                task_ptr += 1;
+            if workers[worker_num] == 0 {
+                if working_task[worker_num] < 99 {
+                    done |= 1 << working_task[worker_num];
+                }
+                if task_ptr < len && (parents[part1[task_ptr]] & done) == parents[part1[task_ptr]] {
+                    workers[worker_num] = part1[task_ptr] + 60;
+                    working_task[worker_num] = part1[task_ptr];
+                    task_ptr += 1;
+                }
             } else {
                 workers[worker_num] -= 1;
             }
